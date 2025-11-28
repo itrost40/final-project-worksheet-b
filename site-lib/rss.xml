@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Homework]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>Homework</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 28 Nov 2025 21:37:53 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 28 Nov 2025 21:37:52 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[Documentation]]></title><description><![CDATA[First opening the worksheet, we realized we did not have very much information on the heart.csv dataset, so we went searching online for information — we threw some keywords into google, and were able to find an article on scribbr.com with an explanation of the dataset.scribbr.com says
+"The [...] dataset contains observations on the percentage of people biking to work each day, the percentage of people smoking, and the percentage of people with heart disease in an imaginary sample of 500 towns."
+With this, we know exactly what each column represents, and we can start working on the first task.[i.a.] What is the dependent (response) variable in the study? Luckily, with the information we already gathered about the dataset, we can easily answer this question – the dependent variable in this study is the percentage of people with heart disease. We can infer this because biking and smoking both have effects on cardiovascular health. So, it is likely this study is trying to find the relationship between these two data points and heart disease.
+[i.b] Which variables appear to be independent (predictors)?
+Using the same logic we used to identify the dependent variable, we can also determine the independent variables. Logically, the likelihood of having heart disease depends on the habits a given person might have, and biking and smoking are exactly that — so it is very likely that these are the independent variables.
+We could also determine the independent variables based on whatever the dependent variable is not. Since we already determined heart disease was the dependent variable, biking and smoking must be the independent variables.
+[i.c.] Are there any variables that show extreme values (outliers) based on the numerical summary?
+To answer this question, we first need the numerical summary of the dataset, which we get like so:
+Code
+# Import heart data.
+heart_data = read.csv('./heart.csv') # Print summary.
+print(summary(heart_data)) Output
+<img alt="i.a.c.png" src="images/i.a.c.png" target="_self"> But we weren't exactly sure how to find outliers with just this summary, so we went searching for a method — we ended up finding a something called the IQR Method:
+IQR Method Find Q1 and Q3.
+Compute the interquartile range (IQR) Compute the fences: Lower fence: Upper fence: <br>Any data point below the lower fence or above the upper fence is considered an outlier. Using this method, we can check if any of the minimum or maximum values of each column are outliers. We decided it would be best to create a function in R that does this for us:
+Code
+# Checks for outliers in a data.frame.
+check_outliers = function(col){ # Compute all values for IQR method. interquartile_range = IQR(col) Q1 = quantile(col, .25) lower_fence = Q1 - (interquartile_range * 1.5) Q3 = quantile(col, .75) upper_fence = Q3 + (interquartile_range * 1.5) # If any values are outside of the fences, return true. if(any(col &lt; lower_fence | col &gt; upper_fence)){ TRUE } # Else, return false. FALSE
+} # Using the function to check for outliers on the columns of heart_data.
+print(sapply(heart_data, check_outliers)) Output
+<img alt="i.c.2.png" src="images/i.c.2.png" target="_self"> Looking at the output we can see that, at least with the IQR method, there are in fact no formal outliers. There are other methods like Z-score, but that is likely to produce the same results.
+]]></description><link>documentation.html</link><guid isPermaLink="false">CIS 150 Final Project/Documentation.md</guid><pubDate>Fri, 28 Nov 2025 20:40:20 GMT</pubDate><enclosure url="images/i.a.c.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;images/i.a.c.png&quot;&gt;&lt;/figure&gt;</content:encoded></item></channel></rss>
